@@ -1,0 +1,43 @@
+name: Metrics
+on:
+  # Schedule updates (each hour)
+  schedule: [{ cron: '0 1 * * *' }]
+  # Lines below let you run workflow manually and on each commit (optional)
+  workflow_dispatch:
+  push: { branches: ['master', 'main'] }
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      # See action.yml for all options
+      - uses: lowlighter/metrics@latest
+        with:
+          # Your GitHub token
+          token: ${{ secrets.METRIC }}
+
+          # Options
+          template: classic
+          user: script-money
+          base: header, activity, community, repositories, metadata
+          repositories_forks: no
+
+          config_gemoji: yes
+          config_animated: yes
+          config_timezone: Asia/Shanghai
+
+          # Plugins
+          plugin_languages: yes
+          plugin_languages_ignored: html, css， markdown # List of languages to ignore
+          plugin_languages_details: bytes-size, percentage # Additionally display total bytes size and percentage
+          plugin_languages_threshold: 2% # Hides all languages less than 2%
+          plugin_languages_limit: 8 # Display up to 8 languages
+          plugin_languages_sections: most-used, recently-used # Display most used and recently used languages stats
+          plugin_languages_indepth: no # Get indepth stats (see documentation before enabling)
+
+          plugin_habits: yes
+          plugin_habits_from: 200 # Use 200 events to compute habits
+          plugin_habits_days: 14 # Keep only events from last 14 days
+          plugin_habits_facts: yes # Display facts section
+          plugin_habits_charts: yes # Display charts section
+
+          plugin_gists: yes
